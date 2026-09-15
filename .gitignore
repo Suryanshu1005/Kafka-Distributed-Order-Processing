@@ -8,3 +8,14 @@ docs/
 
 # Workspace-local MCP secrets
 .vscode/mcp.local.env
+
+# Python generated files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+
+# Local logs and runtime output
+*.log
