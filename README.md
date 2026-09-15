@@ -72,13 +72,11 @@ All Kafka messages use `order_id` as the partition key. Every downstream event p
 - Apache Kafka 4.3.1 extracted locally
 - Git
 
-This project was validated with Kafka at:
+Set `KAFKA_HOME` to your local Kafka installation directory before running Kafka commands:
 
 ```powershell
-C:\Users\sutiwari\Downloads\kafka_2.13-4.3.1\kafka_2.13-4.3.1
+$env:KAFKA_HOME="<path-to-kafka>"
 ```
-
-If Kafka is installed elsewhere, adjust `$env:KAFKA_HOME` in the commands below.
 
 ## Setup
 
@@ -91,10 +89,10 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-For this workspace path, set `PYTHONPATH` before starting services:
+Set `PYTHONPATH` to the repository root before starting services:
 
 ```powershell
-$env:PYTHONPATH="c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
+$env:PYTHONPATH=(Get-Location).Path
 ```
 
 ## Start Kafka Locally
@@ -102,7 +100,7 @@ $env:PYTHONPATH="c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryansh
 Set Kafka home:
 
 ```powershell
-$env:KAFKA_HOME="C:\Users\sutiwari\Downloads\kafka_2.13-4.3.1\kafka_2.13-4.3.1"
+$env:KAFKA_HOME="<path-to-kafka>"
 cd $env:KAFKA_HOME
 ```
 
@@ -126,7 +124,7 @@ Keep this terminal open while running the services.
 Open a new PowerShell terminal:
 
 ```powershell
-$env:KAFKA_HOME="C:\Users\sutiwari\Downloads\kafka_2.13-4.3.1\kafka_2.13-4.3.1"
+$env:KAFKA_HOME="<path-to-kafka>"
 cd $env:KAFKA_HOME
 
 $topics = @(
@@ -160,31 +158,31 @@ Order Service:
 
 ```powershell
 $env:PYTHONPATH=(Get-Location).Path
-cd services\order-service
+Push-Location services\order-service
 python -m uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
 Inventory Service:
 
 ```powershell
-$env:PYTHONPATH="c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
-cd services\inventory-service
+$env:PYTHONPATH=(Get-Location).Path
+Push-Location services\inventory-service
 python main.py
 ```
 
 Payment Service:
 
 ```powershell
-$env:PYTHONPATH="c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
-cd services\payment-service
+$env:PYTHONPATH=(Get-Location).Path
+Push-Location services\payment-service
 python main.py
 ```
 
 Shipping Service:
 
 ```powershell
-$env:PYTHONPATH="c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
-cd services\shipping-service
+$env:PYTHONPATH=(Get-Location).Path
+Push-Location services\shipping-service
 python main.py
 ```
 
@@ -218,7 +216,6 @@ Expected response:
 Verify the end-to-end event chain:
 
 ```powershell
-cd "c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
 $env:PYTHONPATH=(Get-Location).Path
 python verify_e2e.py
 ```
@@ -230,7 +227,6 @@ The script checks the first event from each topic and confirms that all events s
 Replay the 50-order sample fixture through the live Order Service:
 
 ```powershell
-cd "c:\Users\sutiwari\OneDrive - Amadeus Workplace\Desktop\Suryanshu\Personal\Projects\MCP\Kafka Distributed Order Processing"
 $env:PYTHONPATH=(Get-Location).Path
 python replay_fixture.py
 ```
@@ -267,7 +263,7 @@ Expected result for the current Phase 1 implementation:
 Read events from a topic:
 
 ```powershell
-$env:KAFKA_HOME="C:\Users\sutiwari\Downloads\kafka_2.13-4.3.1\kafka_2.13-4.3.1"
+$env:KAFKA_HOME="<path-to-kafka>"
 cd $env:KAFKA_HOME
 .\bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic orders.created --from-beginning --max-messages 5
 ```
